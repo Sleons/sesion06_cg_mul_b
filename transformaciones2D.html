@@ -1,5 +1,5 @@
 <body>
-<canvas id="canvas" height=400/>
+<canvas id="canvas" height=1000 width=1000>
 <script>
 function dibuja() {
   var lienzo = document.getElementById('canvas');
@@ -25,24 +25,141 @@ function triangulo(tab, x1, y1, x2, y2, x3, y3, fill=false) {
     }
 }
 
+function rotx(ang,x,y){
+
+    rad=(Math.PI/180)*ang;
+    seno = Math.sin(rad);
+    coseno = Math.cos(rad);
+    
+    coordx = x*coseno+y*seno
+    return coordx;
+   
+<body>
+<canvas id="canvas" height=1000 width=1000>
+<script>
+function dibuja() {
+  var lienzo = document.getElementById('canvas');
+  if (lienzo.getContext) {
+    var ctx = lienzo.getContext('2d');
+
+    ctx.fillRect(25, 25, 100, 100);
+    ctx.clearRect(45, 45, 60, 60);
+    ctx.strokeRect(50, 50, 50, 50);
+  }
+}
+
+function triangulo(tab, x1, y1, x2, y2, x3, y3, fill=false) {
+    tab.beginPath();
+    tab.moveTo(x1, y1);
+    tab.lineTo(x2, y2);
+    tab.lineTo(x3, y3);
+    if (fill)
+        tab.fill();
+    else {
+        tab.closePath();
+        tab.stroke();
+    }
+}
+
+function rotx(ang,x,y){
+
+    rad=(Math.PI/180)*ang;
+    seno = Math.sin(rad);
+    coseno = Math.cos(rad);
+    
+    coordx = x*coseno+y*seno;
+    return coordx;
+   
+
+}
+
+function roty(ang,x,y){
+
+    rad=(Math.PI/180)*ang;
+    seno = Math.sin(rad);
+    coseno = Math.cos(rad);
+    
+    coordy = y*coseno-x*seno;
+    return coordy;
+   
+
+}
+
+
+
 function draw() {
   var canvas = document.getElementById('canvas');
   if (canvas.getContext) {
     var ctx = canvas.getContext('2d');
 
+    //Triangulo normal:
+
+
     x1=75;  y1=50; x2=100; y2=75; x3=100; y3=25;    
     triangulo(ctx, x1, y1, x2, y2, x3, y3, true);
 
+
     // Realizar traslacion del triangulo anterior con dx =70 y dy=50
-    dx=70; dy=50
+
+    dx=60; dy=50
     triangulo(ctx, x1+dx, y1+dy, x2+dx, y2+dy, x3+dx, y3+dy);
 
     // Realizar un escalado del triangulo anterior con incremento del 50%
     s=50
     //triangulo(ctx, .....);
-    rx1=123; ry1=74; rancho=88; ralto=83
+    rx1=123; ry1=74; rancho=82; ralto=83
     ctx.strokeRect(rx1, ry1, rancho, ralto);
+
     ctx.strokeRect(rx1-(rancho*s/200), ry1-(ralto*s/200), rancho*(1+s/100), ralto*(1+s/100));
+
+   //ROTACION (Cuadrado a base de dos  triangulos)
+   //Referencias : https://www.geogebra.org/m/BUGkm84q.  https://www.youtube.com/watch?v=iCuHOhjZZxE
+
+
+   x1izq=100; y1izq=150; x2izq=150; y2izq=100; x3izq=100; y3izq=100; //Triangulo izquierdo
+   x1der=150; y1der=150, x2der=100; y2der=150; x3der=150; y3der=100; //Triangulo derecho
+   triangulo(ctx, x1izq, y1izq, x2izq, y2izq, x3izq, y3izq, true); 
+   triangulo(ctx, x1der, y1der, x2der, y2der, x3der, y3der, true);  
+   
+   //Parametro y rotaciones de los triangulos:
+   angulo=33; // Menor a 53
+
+   tx1izq=rotx(angulo, x1izq, y1izq);
+   ty1izq=roty(angulo, x1izq, y1izq);
+   tx2izq=rotx(angulo, x2izq, y2izq);
+   ty2izq=roty(angulo, x2izq, y2izq);
+   tx3izq=rotx(angulo, x3izq, y3izq);
+   ty3izq=roty(angulo, x3izq, y3izq);
+   
+   triangulo(ctx, tx1izq, ty1izq, tx2izq, ty2izq, tx3izq, ty3izq,true);
+
+   tx1der=rotx(angulo, x1der, y1der);
+   ty1der=roty(angulo, x1der, y1der);
+   tx2der=rotx(angulo, x2der, y2der);
+   ty2der=roty(angulo, x2der, y2der);
+   tx3der=rotx(angulo, x3der, y3der);
+   ty3der=roty(angulo, x3der, y3der);
+
+
+   triangulo(ctx, tx1der, ty1der, tx2der, ty2der, tx3der, ty3der,true);
+
+
+
+  }
+}
+//dibuja();
+draw();
+</script>
+</body>
+
+   
+
+
+    ty1=116.50; tx2=316.50; ty2=48.20; tx3=273; ty3=73;
+
+
+   triangulo(ctx, tx1, ty1, tx2, ty2, tx3, ty3,);
+
   }
 }
 //dibuja();
